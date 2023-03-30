@@ -1,4 +1,5 @@
 import functools
+import os
 
 import pymongo as pymongo
 from flask import Flask, render_template, redirect, url_for, flash, abort, request
@@ -300,4 +301,6 @@ def delete_post(post_id):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8000)
+    app_host = os.environ.get('APP_HOST', '0.0.0.0')
+    app_port = int(os.environ.get('APP_PORT', '8000'))
+    app.run(host=app_host, port=app_port)
