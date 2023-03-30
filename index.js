@@ -1,27 +1,16 @@
-const express = require('express')
-const { spawn } = require('child_process')
+const { spawn } = require('child_process');
+const port = process.env.PORT || 8000;
 
-const app = express()
-const PORT = process.env.PORT || 8000
+const server = spawn('waitress-serve', ['--port', port, 'main:app']);
 
-app.get('/', (req, res) => {
-  const python = spawn('python', ['app.py'])
+server.stdout.on('data', data => {
+  console.log(`stdout: ${data}`);
+});
 
-  python.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`)
-    res.write(data)
-  })
+server.stderr.on('data', data => {
+  console.error(`stderr: ${data}`);
+});
 
-  python.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`)
-  })
-
-  python.on('close', (code) => {
-    console.log(`child process exited with code ${code}`)
-    res.end()
-  })
-})
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+server.on('close', code => {
+  console.log(`Server exited with code ${code}`);
+});
