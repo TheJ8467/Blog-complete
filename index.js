@@ -1,7 +1,7 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const port = process.env.PORT || 8000;
-const pythonExecutable = 'python3'; // Change this to 'python3' if you're using Python 3.x
+const pythonExecutable = '/usr/bin/python3';
 
 const server = spawn(pythonExecutable, [path.join(__dirname, 'main.py')], {
   env: {
